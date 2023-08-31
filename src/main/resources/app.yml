@@ -1,0 +1,233 @@
+openapi: 3.0.3
+info:
+  title: Simple Swagger API
+  description: simple spring with swagger and openapi code gen
+  contact:
+    name: NightFury-AR
+    url: https://github.com/NightFury-AR/
+    email: asikrahmanu@gmail.com
+  version: "1.0"
+servers:
+  - url: http://localhost:8080/simple-swagger
+  - url: http://localhost:8080/simple-swagger/v1
+tags:
+  - name: SimpleSwaggerApp
+    description: This is Simple Swagger App
+paths:
+  /students:
+    get:
+      tags:
+        - Students
+      summary: retrieve all students
+      description: to retrieve all students
+      operationId: getStudentList
+      responses:
+        200:
+          description: fetched all student details !
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Student'
+                title: student list
+        500:
+          description: something went wrong cannot proceed!
+        404:
+          description: Not Found !
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorType'
+  /student/{studentId}:
+    get:
+      tags:
+        - Students
+      summary: retrieve student by id
+      description: to fetch the student by id
+      operationId: getStudentById
+      parameters:
+        - name: studentId
+          in: path
+          description: unique id for student
+          allowEmptyValue: false
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: fetched successfully !
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+        500:
+          description: something went wrong cannot proceed!
+        404:
+          description: Not Found !
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorType'
+    put:
+      tags:
+        - Students
+      summary: update student by studentId
+      description: used to update the student details by passing studentId
+      operationId: updateStudentById
+      parameters:
+        - name: studentId
+          in: path
+          description: unique id for student
+          allowEmptyValue: false
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Student Details updated successfully !
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+        500:
+          description: something went wrong cannot proceed!
+        404:
+          description: Not Found !
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorType'
+    delete:
+      tags:
+        - Students
+      summary: delete the student by id
+      description: used to delete the student details by passing studentId
+      operationId: deleteStudentById
+      parameters:
+        - name: studentId
+          in: path
+          description: unique id for the student
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Student Details deleted successfully !
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+        500:
+          description: something went wrong cannot proceed!
+        404:
+          description: Not Found !
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorType'
+  /students/add:
+    post:
+      tags:
+        - Students
+      summary: to create a new student
+      description: create a new student with passing details
+      operationId: addStudent
+      requestBody:
+        description: new student data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Student'
+      responses:
+        200:
+          description: student created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+        500:
+          description: something went wrong cannot proceed!
+        404:
+          description: Not Found !
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorType'
+components:
+  schemas:
+    Student:
+      title: student details
+      type: object
+      properties:
+        studentId:
+          type: integer
+          format: int64
+          example: "101"
+          title: "Student Id"
+        studentName:
+          type: string
+          example: " NightFury "
+          title: "Student Email"
+        studentEmail:
+          type: string
+          example: " toothess@berk.com "
+          title: "Student Name"
+        studentLocation:
+          type: string
+          example: " The Hidden World "
+          title: "Student Location"
+        studentGrade:
+          type: string
+          description: Student Grade
+          example: " A "
+          enum:
+            - A
+            - B
+            - C
+        studentAddress:
+          $ref: '#/components/schemas/Address'
+    Address:
+      title: Address details
+      type: object
+      description: Address Details
+      properties:
+        addressId:
+          type: integer
+          format: int64
+          example: "001"
+          title: "Address Id"
+        streetName:
+          type: string
+          example: " Berk Main Street"
+          title: "street name"
+        doorNo:
+          type: integer
+          format: int64
+          title: "door no"
+        cityName:
+          type: string
+          example: " Berk "
+          title: "city name"
+        pinCode:
+          type: integer
+          format: int64
+          example: " 000000 "
+          title: "pincode"
+    ErrorType:
+      title: Error Details
+      type: object
+      description: error class
+      properties:
+        errorCode:
+          type: string
+          title: error code
+          example: 2XX
+        errorMessage:
+          type: string
+          title: error message
+          example: something went wrong
